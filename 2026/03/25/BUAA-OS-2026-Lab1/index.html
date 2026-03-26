@@ -1,0 +1,162 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>BUAA_OS_2026_Lab1 | 春分</title><meta name="author" content="LXY"><meta name="copyright" content="LXY"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="往日不可追">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BUAA_OS_2026_Lab1">
+<meta property="og:url" content="https://l-x-y06.github.io/2026/03/25/BUAA-OS-2026-Lab1/">
+<meta property="og:site_name" content="春分">
+<meta property="og:description" content="往日不可追">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://l-x-y06.github.io/img/tx.jpg">
+<meta property="article:published_time" content="2026-03-25T12:10:06.000Z">
+<meta property="article:modified_time" content="2026-03-25T12:10:46.671Z">
+<meta property="article:author" content="LXY">
+<meta property="article:tag" content="操作系统">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://l-x-y06.github.io/img/tx.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "BUAA_OS_2026_Lab1",
+  "url": "https://l-x-y06.github.io/2026/03/25/BUAA-OS-2026-Lab1/",
+  "image": "https://l-x-y06.github.io/img/tx.jpg",
+  "datePublished": "2026-03-25T12:10:06.000Z",
+  "dateModified": "2026-03-25T12:10:46.671Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "LXY",
+      "url": "https://l-x-y06.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://l-x-y06.github.io/2026/03/25/BUAA-OS-2026-Lab1/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css?v=5.5.4"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'BUAA_OS_2026_Lab1',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 8.1.1"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/background.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">春分</span></a><a class="nav-page-title" href="/"><span class="site-name">BUAA_OS_2026_Lab1</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">BUAA_OS_2026_Lab1</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-03-25T12:10:06.000Z" title="发表于 2026-03-25 20:10:06">2026-03-25</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-03-25T12:10:46.671Z" title="更新于 2026-03-25 20:10:46">2026-03-25</time></span></div><div class="meta-secondline"></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://l-x-y06.github.io">LXY</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://l-x-y06.github.io/2026/03/25/BUAA-OS-2026-Lab1/">https://l-x-y06.github.io/2026/03/25/BUAA-OS-2026-Lab1/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://l-x-y06.github.io" target="_blank">春分</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></div><div class="post-share"><div class="social-share" data-image="/img/tx.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2026/03/25/BUAA-OS-%E5%90%AF%E5%8A%A8/" title="BUAA_OS_启动"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">BUAA_OS_启动</div></div><div class="info-2"><div class="info-item-1">计算机的启动过程bootloader硬件如何知道内核的位置？如何加载内核？ 在大多数计算机系统中，包括一段小程序，称为bootloader，负责找到内核，并启动执行 CPU通电或Reset后，CPU从预定义的内存位置开始执行bootloader 这个程序一般储存在ROM(read only)只读寄存器，因为RAM在系统启动时处于未知状态 ROM不需要初始化，也不容易被计算机病毒感染 bootloader有什么作用？  初始化硬件设备  建立内存空间的映射表   从而  建立适当的系统软硬件环境  为最终调用OS内核做准备    一些小型系统（或嵌入式系统）将整个操作系统储存在ROM中  只适用于小型操作系统及简单的硬件  更改bootloader代码需要改变ROM芯片，一些系统通过使用可擦除可编程只读储存器（EPROM或FLASH）  容量小，价格贵，速度比RAM慢   对于大型操作系统（Windows，Linux等），bootloader一般放在非易失存储器中，而将OS内核置于磁盘，实现软硬件启动分离  bootloader需要正确的找到内核并执行，分为stage1和2两个过程...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/03/25/BUAA-OS-%E5%90%AF%E5%8A%A8/" title="BUAA_OS_启动"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-03-25</div><div class="info-item-2">BUAA_OS_启动</div></div><div class="info-2"><div class="info-item-1">计算机的启动过程bootloader硬件如何知道内核的位置？如何加载内核？ 在大多数计算机系统中，包括一段小程序，称为bootloader，负责找到内核，并启动执行 CPU通电或Reset后，CPU从预定义的内存位置开始执行bootloader 这个程序一般储存在ROM(read only)只读寄存器，因为RAM在系统启动时处于未知状态 ROM不需要初始化，也不容易被计算机病毒感染 bootloader有什么作用？  初始化硬件设备  建立内存空间的映射表   从而  建立适当的系统软硬件环境  为最终调用OS内核做准备    一些小型系统（或嵌入式系统）将整个操作系统储存在ROM中  只适用于小型操作系统及简单的硬件  更改bootloader代码需要改变ROM芯片，一些系统通过使用可擦除可编程只读储存器（EPROM或FLASH）  容量小，价格贵，速度比RAM慢   对于大型操作系统（Windows，Linux等），bootloader一般放在非易失存储器中，而将OS内核置于磁盘，实现软硬件启动分离  bootloader需要正确的找到内核并执行，分为stage1和2两个过程...</div></div></div></a><a class="pagination-related" href="/2026/03/21/BUAA-OS-2026-Lab0/" title="BUAA-OS-2026-Lab0"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-03-21</div><div class="info-item-2">BUAA-OS-2026-Lab0</div></div><div class="info-2"><div class="info-item-1">思考题Thinking 0.1   创建README.txt并执行git status &gt; Untracked.txt命令如下  12git@24371255:~/learnGit $ touch README.txtgit@24371255:~/learnGit $ git status &gt; Untracked.txt  在README.txt中添加hello OS，并执行add指令，再执行git status &gt; Stage.txt   123git@24371255:~/learnGit $ echo &quot;hello OS&quot; &gt; README.txt git@24371255:~/learnGit $ git add README.txt git@24371255:~/learnGit $ git status &gt; Stage.txt  提交READ.txt文件 1234git@24371255:~/learnGit $ git commit -m 24371255[master （根提交） 2c03ad8] 24371255...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/defaltload.gif" data-lazy-src="/img/tx.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">LXY</div><div class="author-info-description">往日不可追</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">4</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">2</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/l-x-y06"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/l-x-y06" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:xyli40727@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/03/25/BUAA-OS-2026-Lab1/" title="BUAA_OS_2026_Lab1">BUAA_OS_2026_Lab1</a><time datetime="2026-03-25T12:10:06.000Z" title="发表于 2026-03-25 20:10:06">2026-03-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/03/25/BUAA-OS-%E5%90%AF%E5%8A%A8/" title="BUAA_OS_启动">BUAA_OS_启动</a><time datetime="2026-03-25T12:07:47.000Z" title="发表于 2026-03-25 20:07:47">2026-03-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/03/25/BUAA-%E6%95%B0%E6%8D%AE%E5%BA%93-03-%E9%80%BB%E8%BE%91%E6%A8%A1%E5%9E%8B-%E5%85%B3%E7%B3%BB%E6%A8%A1%E5%9E%8B/" title="BUAA_数据库_03_逻辑模型_关系模型">BUAA_数据库_03_逻辑模型_关系模型</a><time datetime="2026-03-25T11:31:14.000Z" title="发表于 2026-03-25 19:31:14">2026-03-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/03/21/BUAA-OS-2026-Lab0/" title="BUAA-OS-2026-Lab0">BUAA-OS-2026-Lab0</a><time datetime="2026-03-21T06:30:00.000Z" title="发表于 2026-03-21 14:30:00">2026-03-21</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By LXY</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.1</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.4</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.4"></script><script src="/js/main.js?v=5.5.4"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@19.1.3/dist/lazyload.iife.min.js"></script><div class="js-pjax"></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/canvas-fluttering-ribbon.min.js"></script></div></body></html>

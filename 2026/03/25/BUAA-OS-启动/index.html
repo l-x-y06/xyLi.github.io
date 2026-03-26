@@ -1,0 +1,290 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>BUAA_OS_启动 | 春分</title><meta name="author" content="LXY"><meta name="copyright" content="LXY"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="计算机的启动过程bootloader硬件如何知道内核的位置？如何加载内核？ 在大多数计算机系统中，包括一段小程序，称为bootloader，负责找到内核，并启动执行 CPU通电或Reset后，CPU从预定义的内存位置开始执行bootloader 这个程序一般储存在ROM(read only)只读寄存器，因为RAM在系统启动时处于未知状态 ROM不需要初始化，也不容易被计算机病毒感染 bootloa">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BUAA_OS_启动">
+<meta property="og:url" content="https://l-x-y06.github.io/2026/03/25/BUAA-OS-%E5%90%AF%E5%8A%A8/">
+<meta property="og:site_name" content="春分">
+<meta property="og:description" content="计算机的启动过程bootloader硬件如何知道内核的位置？如何加载内核？ 在大多数计算机系统中，包括一段小程序，称为bootloader，负责找到内核，并启动执行 CPU通电或Reset后，CPU从预定义的内存位置开始执行bootloader 这个程序一般储存在ROM(read only)只读寄存器，因为RAM在系统启动时处于未知状态 ROM不需要初始化，也不容易被计算机病毒感染 bootloa">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://l-x-y06.github.io/img/tx.jpg">
+<meta property="article:published_time" content="2026-03-25T12:07:47.000Z">
+<meta property="article:modified_time" content="2026-03-26T08:27:59.732Z">
+<meta property="article:author" content="LXY">
+<meta property="article:tag" content="操作系统">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://l-x-y06.github.io/img/tx.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "BUAA_OS_启动",
+  "url": "https://l-x-y06.github.io/2026/03/25/BUAA-OS-%E5%90%AF%E5%8A%A8/",
+  "image": "https://l-x-y06.github.io/img/tx.jpg",
+  "datePublished": "2026-03-25T12:07:47.000Z",
+  "dateModified": "2026-03-26T08:27:59.732Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "LXY",
+      "url": "https://l-x-y06.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://l-x-y06.github.io/2026/03/25/BUAA-OS-%E5%90%AF%E5%8A%A8/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css?v=5.5.4"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'BUAA_OS_启动',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 8.1.1"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/background.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">春分</span></a><a class="nav-page-title" href="/"><span class="site-name">BUAA_OS_启动</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">BUAA_OS_启动</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-03-25T12:07:47.000Z" title="发表于 2026-03-25 20:07:47">2026-03-25</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-03-26T08:27:59.732Z" title="更新于 2026-03-26 16:27:59">2026-03-26</time></span></div><div class="meta-secondline"></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="计算机的启动过程"><a href="#计算机的启动过程" class="headerlink" title="计算机的启动过程"></a>计算机的启动过程</h1><h2 id="bootloader"><a href="#bootloader" class="headerlink" title="bootloader"></a>bootloader</h2><p>硬件如何知道内核的位置？如何加载内核？</p>
+<p>在大多数计算机系统中，包括一段小程序，称为bootloader，负责找到内核，并启动执行</p>
+<p>CPU通电或Reset后，CPU从<strong>预定义</strong>的内存位置开始执行bootloader</p>
+<p>这个程序一般储存在ROM(read only)只读寄存器，因为RAM在<strong>系统启动时</strong>处于<strong>未知状态</strong></p>
+<p>ROM不需要初始化，也不容易被计算机病毒感染</p>
+<p>bootloader有什么作用？</p>
+<ul>
+<li><p>初始化硬件设备</p>
+</li>
+<li><p>建立内存空间的映射表</p>
+</li>
+</ul>
+<p>从而</p>
+<ul>
+<li><p>建立适当的系统软硬件环境</p>
+</li>
+<li><p>为最终调用OS内核做准备</p>
+</li>
+</ul>
+<blockquote>
+<p>一些小型系统（或嵌入式系统）将整个操作系统储存在<strong>ROM</strong>中</p>
+<ul>
+<li><p>只适用于小型操作系统及简单的硬件</p>
+</li>
+<li><p>更改bootloader代码需要改变ROM芯片，一些系统通过使用可擦除可编程只读储存器（EPROM或FLASH）</p>
+</li>
+<li><p>容量小，价格贵，速度比RAM慢</p>
+</li>
+</ul>
+<p>对于大型操作系统（Windows，Linux等），bootloader一般放在非易失存储器中，而将OS内核置于磁盘，实现软硬件启动分离</p>
+</blockquote>
+<p>bootloader需要正确的找到内核并执行，分为stage1和2两个过程</p>
+<h3 id="stage1"><a href="#stage1" class="headerlink" title="stage1"></a>stage1</h3><ul>
+<li><p>依赖于CPU体系结构的代码一般放在这且可以汇编语言实现</p>
+</li>
+<li><p>需要初始化硬件设备，包括watchdog timer、中断、时钟、内存等</p>
+</li>
+<li><p>bootloader程序直接从非易失存储器上加载，为stage2准备RAM空间</p>
+</li>
+</ul>
+<h3 id="stage2"><a href="#stage2" class="headerlink" title="stage2"></a>stage2</h3><ul>
+<li><p>通常用C语言实现，可实现复杂功能，有更好的可读性和移植性</p>
+</li>
+<li><p>先初始化这一阶段需要使用的硬件设备及其他功能</p>
+</li>
+<li><p>将<strong>内核镜像</strong>从存储器读到RAM中，并为内核启动设置参数</p>
+</li>
+<li><p>将CPU指令寄存器的内容设置为内核入口函数的地址，即可将控制权从bootloader转交给操作系统内核</p>
+</li>
+</ul>
+<p><img src="/img/defaltload.gif" data-lazy-src="https://raw.githubusercontent.com/l-x-y06/image/master/6d03496c-8aae-48d9-b758-70d2104724d8.png"></p>
+<blockquote>
+<p>U-boot：一个具体的bootloader实现，特点是开源跨平台，主要用于嵌入式系统</p>
+<p>主要功能：</p>
+<ul>
+<li><p>硬件初始化</p>
+</li>
+<li><p>引导控制流程（从Flash，SD卡，网络</p>
+</li>
+<li><p>拥有交互式命令行</p>
+</li>
+</ul>
+<p>GRUB和LILO：Linux最重要的bootloader（x86</p>
+</blockquote>
+<h2 id="MIPS-CPU系统启动"><a href="#MIPS-CPU系统启动" class="headerlink" title="MIPS CPU系统启动"></a>MIPS CPU系统启动</h2><p>直接由bootloader引导</p>
+<h3 id="硬件初始化"><a href="#硬件初始化" class="headerlink" title="硬件初始化"></a>硬件初始化</h3><p>处理器复位，调试接口初始化，TLB初始化（将其注意清空防止错误命中），cache初始化（将tag初始化置为无效即可，这样就不会错误命中），内存初始化，IO总线初始化</p>
+<blockquote>
+<p>现在cache越来越大，这些初始化过程越来越多的使用硬件自动完成，软件花的时间越来越少</p>
+</blockquote>
+<h3 id="MIPS地址空间"><a href="#MIPS地址空间" class="headerlink" title="MIPS地址空间"></a>MIPS地址空间</h3><img title="" src="/img/defaltload.gif" data-lazy-src="https://raw.githubusercontent.com/l-x-y06/image/master/e03831da-d9a8-46d4-bd20-b66a464a4473.png" alt="" data-align="center">
+
+<h4 id="kuseg"><a href="#kuseg" class="headerlink" title="kuseg"></a>kuseg</h4><p>用户态下唯一可用地址空间，大小2GB，需要MMU，需要Cache</p>
+<h4 id="kseg0"><a href="#kseg0" class="headerlink" title="kseg0"></a>kseg0</h4><p>内核态下可用，MMU将地址最高位清零就得到物理地址，即被映射到物理地址的低512MB（CPU直接把最高位清理，所以是unmapped），存取经过cache</p>
+<h4 id="kseg1"><a href="#kseg1" class="headerlink" title="kseg1"></a>kseg1</h4><p>高三位清零即为物理地址，同样也是unmapped，但是存取不经过cache，是<strong>唯一系统重启时能正常工作的地址空间</strong></p>
+<h4 id="kseg2"><a href="#kseg2" class="headerlink" title="kseg2"></a>kseg2</h4><p>内核态，需要MMU，需要cache</p>
+<h3 id="MIPS启动过程"><a href="#MIPS启动过程" class="headerlink" title="MIPS启动过程"></a>MIPS启动过程</h3><p>直接由bootloader（U-boot）引导</p>
+<p>stage1</p>
+<p><img src="/img/defaltload.gif" data-lazy-src="https://raw.githubusercontent.com/l-x-y06/image/master/4ce85807-fc43-4544-b77f-2088611dee7a.png"></p>
+<p>stage2</p>
+<p><img src="/img/defaltload.gif" data-lazy-src="https://raw.githubusercontent.com/l-x-y06/image/master/e7344e74-e46b-4294-80c6-259388bfa7de.png"></p>
+<h2 id="X86-CPU系统启动"><a href="#X86-CPU系统启动" class="headerlink" title="X86 CPU系统启动"></a>X86 CPU系统启动</h2><h3 id="硬件初始化过程"><a href="#硬件初始化过程" class="headerlink" title="硬件初始化过程"></a>硬件初始化过程</h3><h4 id="加载BIOS"><a href="#加载BIOS" class="headerlink" title="加载BIOS"></a>加载BIOS</h4><blockquote>
+<p>BIOS程序存放于一个断电后内容不会丢失的只读存储器中；系统上电或被重置（reset）时，处理器要执行第一条指令的地址会被定位到BIOS的存储器中，让初始化程序开始运行。在X86系统中，CPU加电后将跳转到BIOS的固定物理地址0xFFFF0。 （Intel 80386）</p>
+</blockquote>
+<ul>
+<li><p>系统上电时先从BIOS读取信息</p>
+<ul>
+<li>BIOS中包含了CPU的相关信息、设备启动顺序信息、硬盘信息、内存信息、时钟信息、PnP特性等等。</li>
+</ul>
+</li>
+<li><p>BIOS支持硬件自检，若出现问题则终止</p>
+</li>
+<li><p>BIOS支持用户自选让哪个设备引导电脑</p>
+</li>
+</ul>
+<p>UEFI：<strong>C语言风格</strong>的参数堆栈传递方式，动态链接，突破了BIOS16位的寻址能力</p>
+<h4 id="读取MBR"><a href="#读取MBR" class="headerlink" title="读取MBR"></a>读取MBR</h4><ul>
+<li><p>硬盘上<strong>第0磁头第0磁道第一个扇区</strong>被称为MBR(主引导记录），它的大小是512字节，里面存放了预启动信息、分区表信息。</p>
+</li>
+<li><p><u>位于磁盘固定位置</u></p>
+</li>
+</ul>
+<p>前446字节为启动代码和数据，包含了bootloader</p>
+<p>后64个字节，由四个16字节的逻辑分区项构成</p>
+<p>最后两个幻数AA55，若无这两个幻数，就认为这是一个未被分区的硬盘</p>
+<p>至此硬件初始基本完成</p>
+<h2 id="linux引导过程"><a href="#linux引导过程" class="headerlink" title="linux引导过程"></a>linux引导过程</h2><p>BIOS将硬盘的主引导记录读入7C00，然后将控制权转交主引导程序（GRUB第一阶段）</p>
+<ul>
+<li><p>检查幻数</p>
+</li>
+<li><p>开始执行<em><strong>MBR</strong></em>中程序</p>
+</li>
+<li><p>把自己复制到0x0600</p>
+</li>
+<li><p>搜索活动分区，若无或不止一个则停止</p>
+</li>
+<li><p>将活动分区的第一个扇区（<em><strong>bootsector</strong></em>）复制到7c00（为什么复制因为要给这个腾地方</p>
+</li>
+<li><p>检查幻数</p>
+</li>
+<li><p>继续执行</p>
+</li>
+</ul>
+<blockquote>
+<p>bootsector：MBR分区表的指定的每个分区的第一个扇区</p>
+<p>可以为空（没装系统）</p>
+</blockquote>
+<p><img src="/img/defaltload.gif" data-lazy-src="https://raw.githubusercontent.com/l-x-y06/image/master/063d0ad7-bcf5-4830-ab03-1c2ca7b2c083.png"></p>
+<p>接着根据GRUB（bootloader）设定的内核映像所在，系统开始读取，解压缩，执行函数。完成后，至此基于linux的程序可以运行</p>
+<h6 id="OS小白，若有错漏请见谅"><a href="#OS小白，若有错漏请见谅" class="headerlink" title="OS小白，若有错漏请见谅"></a>OS小白，若有错漏请见谅</h6></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://l-x-y06.github.io">LXY</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://l-x-y06.github.io/2026/03/25/BUAA-OS-%E5%90%AF%E5%8A%A8/">https://l-x-y06.github.io/2026/03/25/BUAA-OS-%E5%90%AF%E5%8A%A8/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://l-x-y06.github.io" target="_blank">春分</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a></div><div class="post-share"><div class="social-share" data-image="/img/tx.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related  no-desc" href="/2026/03/25/BUAA-OS-2026-Lab1/" title="BUAA_OS_2026_Lab1"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">BUAA_OS_2026_Lab1</div></div></div></a><a class="pagination-related" href="/2026/03/25/BUAA-%E6%95%B0%E6%8D%AE%E5%BA%93-03-%E9%80%BB%E8%BE%91%E6%A8%A1%E5%9E%8B-%E5%85%B3%E7%B3%BB%E6%A8%A1%E5%9E%8B/" title="BUAA_数据库_03_逻辑模型_关系模型"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">BUAA_数据库_03_逻辑模型_关系模型</div></div><div class="info-2"><div class="info-item-1">03-数据模型-逻辑模型概述逻辑数据模型是对现实世界的第二层抽象。将概念数据模式 映射为数据库的逻辑结构 直接与DBMS有关，有严格的形式化定义，方便在计算机系统实现 通常有一组严格定义的无二义性语法语义的DB语言，人们可以由此定义，操纵DB中数据 三要素：  数据结构  数据操作  数据约束   关系数据结构发展历史不赘述    ER模型 关系模型    有很多概念（实体，数据，关系） 只有关系一个概念   用于描述应用需求 用表的集合描述世界   不适合在计算机实现（只有数据结构而无数据操作 适合在计算机实现   用二维表格结构表示实体间关系 关系模型是各个关系的框架的集合，即，关系模型是一些表格（二维）的格式，其中包括关系名、属性名、关键字等 关系的框架称为关系模式关系的框架和符合该框架的关系值称为关系实例一个类可以存放两类信息 描述实体本身的信息  描述实体之间的联系的信息   在层次模型和网状模型中，把有联系的实体用指针链接，实体之间的联系通过指针实现。 关系模式采用了不同的思想，用二维表来表示实体间联系，这是关系模型的本质 ∴ 在建立关系模型时，只要把实体及其属性用关...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/03/21/BUAA-OS-2026-Lab0/" title="BUAA-OS-2026-Lab0"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-03-21</div><div class="info-item-2">BUAA-OS-2026-Lab0</div></div><div class="info-2"><div class="info-item-1">思考题Thinking 0.1   创建README.txt并执行git status &gt; Untracked.txt命令如下  12git@24371255:~/learnGit $ touch README.txtgit@24371255:~/learnGit $ git status &gt; Untracked.txt  在README.txt中添加hello OS，并执行add指令，再执行git status &gt; Stage.txt   123git@24371255:~/learnGit $ echo &quot;hello OS&quot; &gt; README.txt git@24371255:~/learnGit $ git add README.txt git@24371255:~/learnGit $ git status &gt; Stage.txt  提交READ.txt文件 1234git@24371255:~/learnGit $ git commit -m 24371255[master （根提交） 2c03ad8] 24371255...</div></div></div></a><a class="pagination-related no-desc" href="/2026/03/25/BUAA-OS-2026-Lab1/" title="BUAA_OS_2026_Lab1"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-03-25</div><div class="info-item-2">BUAA_OS_2026_Lab1</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/defaltload.gif" data-lazy-src="/img/tx.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">LXY</div><div class="author-info-description">往日不可追</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">4</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">2</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/l-x-y06"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/l-x-y06" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:xyli40727@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%9A%84%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B"><span class="toc-number">1.</span> <span class="toc-text">计算机的启动过程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#bootloader"><span class="toc-number">1.1.</span> <span class="toc-text">bootloader</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#stage1"><span class="toc-number">1.1.1.</span> <span class="toc-text">stage1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#stage2"><span class="toc-number">1.1.2.</span> <span class="toc-text">stage2</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MIPS-CPU%E7%B3%BB%E7%BB%9F%E5%90%AF%E5%8A%A8"><span class="toc-number">1.2.</span> <span class="toc-text">MIPS CPU系统启动</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A1%AC%E4%BB%B6%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-number">1.2.1.</span> <span class="toc-text">硬件初始化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MIPS%E5%9C%B0%E5%9D%80%E7%A9%BA%E9%97%B4"><span class="toc-number">1.2.2.</span> <span class="toc-text">MIPS地址空间</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#kuseg"><span class="toc-number">1.2.2.1.</span> <span class="toc-text">kuseg</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#kseg0"><span class="toc-number">1.2.2.2.</span> <span class="toc-text">kseg0</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#kseg1"><span class="toc-number">1.2.2.3.</span> <span class="toc-text">kseg1</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#kseg2"><span class="toc-number">1.2.2.4.</span> <span class="toc-text">kseg2</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MIPS%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B"><span class="toc-number">1.2.3.</span> <span class="toc-text">MIPS启动过程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#X86-CPU%E7%B3%BB%E7%BB%9F%E5%90%AF%E5%8A%A8"><span class="toc-number">1.3.</span> <span class="toc-text">X86 CPU系统启动</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A1%AC%E4%BB%B6%E5%88%9D%E5%A7%8B%E5%8C%96%E8%BF%87%E7%A8%8B"><span class="toc-number">1.3.1.</span> <span class="toc-text">硬件初始化过程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8A%A0%E8%BD%BDBIOS"><span class="toc-number">1.3.1.1.</span> <span class="toc-text">加载BIOS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AF%BB%E5%8F%96MBR"><span class="toc-number">1.3.1.2.</span> <span class="toc-text">读取MBR</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#linux%E5%BC%95%E5%AF%BC%E8%BF%87%E7%A8%8B"><span class="toc-number">1.4.</span> <span class="toc-text">linux引导过程</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#OS%E5%B0%8F%E7%99%BD%EF%BC%8C%E8%8B%A5%E6%9C%89%E9%94%99%E6%BC%8F%E8%AF%B7%E8%A7%81%E8%B0%85"><span class="toc-number">1.4.1.</span> <span class="toc-text">OS小白，若有错漏请见谅</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/03/25/BUAA-OS-2026-Lab1/" title="BUAA_OS_2026_Lab1">BUAA_OS_2026_Lab1</a><time datetime="2026-03-25T12:10:06.000Z" title="发表于 2026-03-25 20:10:06">2026-03-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/03/25/BUAA-OS-%E5%90%AF%E5%8A%A8/" title="BUAA_OS_启动">BUAA_OS_启动</a><time datetime="2026-03-25T12:07:47.000Z" title="发表于 2026-03-25 20:07:47">2026-03-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/03/25/BUAA-%E6%95%B0%E6%8D%AE%E5%BA%93-03-%E9%80%BB%E8%BE%91%E6%A8%A1%E5%9E%8B-%E5%85%B3%E7%B3%BB%E6%A8%A1%E5%9E%8B/" title="BUAA_数据库_03_逻辑模型_关系模型">BUAA_数据库_03_逻辑模型_关系模型</a><time datetime="2026-03-25T11:31:14.000Z" title="发表于 2026-03-25 19:31:14">2026-03-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/03/21/BUAA-OS-2026-Lab0/" title="BUAA-OS-2026-Lab0">BUAA-OS-2026-Lab0</a><time datetime="2026-03-21T06:30:00.000Z" title="发表于 2026-03-21 14:30:00">2026-03-21</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By LXY</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.1</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.4</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.4"></script><script src="/js/main.js?v=5.5.4"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@19.1.3/dist/lazyload.iife.min.js"></script><div class="js-pjax"></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/canvas-fluttering-ribbon.min.js"></script></div></body></html>
